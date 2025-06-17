@@ -1,10 +1,22 @@
-function App() {
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
+import { HomeComponent } from "./pages/Home"
+import { Empleados } from "./pages/Empleados"
+import { CrearEmpleado } from "./pages/CrearEmpleado"
+import { NotFound } from "./components/NotFound"
 
+
+function App() {
   return (
-    <>
-      <h1>Gestion de empleados</h1>
-    </>
+    <Router>
+      <Routes>
+        <Route path="/" element={<HomeComponent />}/>
+        <Route path="/empleados" element={<Empleados />}/>
+        <Route path="/empleados/nuevo" element={<CrearEmpleado />}/>
+        <Route path="*" element={<NotFound />}/>
+      </Routes>
+    </Router>
   )
 }
+
 
 export default App
