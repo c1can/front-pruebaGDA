@@ -3,7 +3,6 @@ import {
   CardContent,
   Avatar,
   Typography,
-  Chip,
   IconButton,
   Box,
   Stack,
@@ -19,7 +18,7 @@ import {
 } from '@mui/icons-material';
 
 
-export const TarjetaEmpleado = ({employee}) =>{
+export const TarjetaEmpleado = ({empleado}) =>{
 
     const formatDate = (dateString) => {
     return new Date(dateString).toLocaleDateString('es-ES', {
@@ -45,7 +44,7 @@ export const TarjetaEmpleado = ({employee}) =>{
       <CardContent sx={{ flexGrow: 1, p: 3 }}>
         <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
           <Avatar
-            src={employee.avatar}
+            src={empleado.apellidos}
             sx={{ 
               width: 60, 
               height: 60, 
@@ -55,25 +54,16 @@ export const TarjetaEmpleado = ({employee}) =>{
               fontWeight: 'bold'
             }}
           >
-            {employee.firstName[0]}{employee.lastName[0]}
+            {empleado.nombres}{empleado.apellidos}
           </Avatar>
           <Box sx={{ flexGrow: 1 }}>
             <Typography variant="h6" component="h3" fontWeight="bold">
-              {employee.firstName} {employee.lastName}
+              {empleado.nombres} {empleado.apellidos}
             </Typography>
             <Typography variant="body2" color="text.secondary">
-              {employee.position}
+              {empleado.Municipio.nombre}
             </Typography>
           </Box>
-          <Chip
-            label={employee.status === 'active' ? 'Activo' : 'Inactivo'}
-            color={employee.status === 'active' ? 'success' : 'default'}
-            size="small"
-            sx={{ 
-              fontWeight: 'medium',
-              textTransform: 'capitalize'
-            }}
-          />
         </Box>
 
         <Divider sx={{ my: 2 }} />
@@ -82,40 +72,31 @@ export const TarjetaEmpleado = ({employee}) =>{
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
             <EmailIcon color="action" fontSize="small" />
             <Typography variant="body2" color="text.secondary">
-              {employee.email}
+              {empleado.correo_electronico}
             </Typography>
           </Box>
           
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
             <PhoneIcon color="action" fontSize="small" />
             <Typography variant="body2" color="text.secondary">
-              {employee.phone}
+              {empleado.telefono}
             </Typography>
           </Box>
           
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
             <WorkIcon color="action" fontSize="small" />
             <Typography variant="body2" color="text.secondary">
-              {employee.department}
+              {empleado.direccion}
             </Typography>
           </Box>
           
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
             <CalendarIcon color="action" fontSize="small" />
             <Typography variant="body2" color="text.secondary">
-              Contratado: {formatDate(employee.hireDate)}
+              Nacimiento: {formatDate(empleado.fecha_nacimiento)}
             </Typography>
           </Box>
         </Stack>
-
-        <Box sx={{ mt: 2, pt: 2, borderTop: 1, borderColor: 'divider' }}>
-          <Typography variant="h6" color="primary.main" fontWeight="bold">
-            {employee.salary}
-          </Typography>
-          <Typography variant="caption" color="text.secondary">
-            Salario anual
-          </Typography>
-        </Box>
       </CardContent>
 
       <Box sx={{ 
@@ -126,7 +107,7 @@ export const TarjetaEmpleado = ({employee}) =>{
         gap: 1
       }}>
         <IconButton
-          onClick={() => onEdit(employee)}
+          onClick={() => onEdit(empleado)}
           color="primary"
           size="small"
           sx={{ 
@@ -139,7 +120,7 @@ export const TarjetaEmpleado = ({employee}) =>{
           <EditIcon fontSize="small" />
         </IconButton>
         <IconButton
-          onClick={() => onDelete(employee.id)}
+          onClick={() => onDelete(empleado.id)}
           color="error"
           size="small"
           sx={{ 

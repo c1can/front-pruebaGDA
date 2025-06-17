@@ -30,7 +30,7 @@ export function Empleados () {
         </Typography>
         
         <Grid container spacing={2} alignItems="center">
-          <Grid item xs={12} md={4}>
+          <Grid>
             <TextField
               fullWidth
               placeholder="Buscar empleados..."
@@ -39,7 +39,7 @@ export function Empleados () {
             />
           </Grid>
           
-          <Grid item xs={12} md={4} sx={{width:"150px"}}>
+          <Grid sx={{width:"150px"}}>
             <FormControl fullWidth>
               <InputLabel>Departamento</InputLabel>
               <Select
@@ -50,11 +50,11 @@ export function Empleados () {
             </FormControl>
           </Grid>
           
-          <Grid item xs={12} md={4} sx={{width:"150px"}}>
+          <Grid sx={{width:"150px"}}>
             <FormControl fullWidth>
               <InputLabel>Municipios</InputLabel>
               <Select label="Municipios">
-                  <MenuItem key={"ejemplo"} value={"ejemplo"}>fetch municipios</MenuItem>
+                  <MenuItem>fetch municipios</MenuItem>
               </Select>
             </FormControl>
           </Grid>

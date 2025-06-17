@@ -3,12 +3,22 @@ import { initialEmployees } from "../mocks/empleados"
 import { TarjetaEmpleado } from "./TarjetaEmpleado"
 import { Grid, Box, Typography } from "@mui/material"
 import { AccountBox } from "@mui/icons-material"
+import { getEmpleados } from "../services/fetchEmpleados"
 
 export function ListaEmpleados() {
-    const [employees, setEmployees] = useState(initialEmployees)
+    const [empleados, setEmpleados] = useState([])
 
     useEffect(() => {
-        console.log(employees)
+        async function cargarEmpleados() {
+            try {
+                const data = await getEmpleados()
+                setEmpleados(data)
+            } catch (error) {
+                console.log("Algo salio mal ", error)
+            }
+        }
+
+        cargarEmpleados()
     }, [])
 
 
@@ -19,11 +29,11 @@ export function ListaEmpleados() {
                 Lista de Empleados
             </Typography>
             <Grid container spacing={3}>
-                {employees.map((employee, index) => <>
-                    <Grid item size={{xs: 6, md: 4}} key={employee.id}>
-                        <TarjetaEmpleado employee={employee}/>
+                {empleados.map(empleado => (
+                    <Grid key={empleado.telefono} size={{xs: 6, md: 4}}>
+                        <TarjetaEmpleado empleado={empleado} />
                     </Grid>
-                </>)}
+                ))}
             </Grid>
         </Box>
     )
