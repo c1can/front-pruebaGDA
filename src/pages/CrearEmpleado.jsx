@@ -6,7 +6,9 @@ import {
   Button,
   MenuItem,
   Typography,
-  Paper
+  Paper,
+  Snackbar,
+  Alert,
 } from '@mui/material';
 import { yupEmpleadoSchema } from '../validations/yupEmpleado';
 import { getDepartamentos } from '../services/fetchDepartamentos';
@@ -29,6 +31,10 @@ export function CrearEmpleado() {
 
   const [departamentos, setDepartamentos] = useState([])
   const [municipios, setMunicipios] = useState([])
+
+  const [open, setOpen] = useState(false)
+  const [mensaje, setMensaje] = useState('')
+  const [tipoAlerta, setTipoAlerta] = useState('success')
 
   useEffect(() => {
     async function cargarDepartamentos() {
@@ -94,10 +100,16 @@ export function CrearEmpleado() {
       if(isValid) {
         const response = await postEmpleado(formData)
         console.log(response)
+        setMensaje("Empleado agregado correctamente")
+        setTipoAlerta('success')
+        setOpen(true)
         //console.log("datos enviados")
       }
     } catch (error) {
       console.log(error)
+      setMensaje("Error al agregar empleado")
+      setTipoAlerta("error")
+      setOpen(false)
     }
 
 
@@ -238,6 +250,20 @@ export function CrearEmpleado() {
               </Button>
         </form>
       </Paper>
+
+
+      <Snackbar 
+      open={open}
+      autoHideDuration={3000}
+      onClose={() => setOpen(false)}
+      anchorOrigin={{vertical: 'bottom', horizontal:'right'}}>
+        <Alert 
+        onClose={() => {setOpen(false)}}
+        severity={tipoAlerta}
+        sx={{width:"100%"}}>
+          {mensaje}
+        </Alert>
+      </Snackbar>
     </Box>
   );
 }
