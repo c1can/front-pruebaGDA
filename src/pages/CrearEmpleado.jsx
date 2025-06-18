@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   Box,
   Grid,
@@ -9,15 +9,10 @@ import {
   Paper
 } from '@mui/material';
 import { yupEmpleadoSchema } from '../validations/yupEmpleado';
-
-const departamentos = ['San Salvador', 'La Libertad', 'Santa Ana'];
-const municipios = {
-  'San Salvador': ['San Salvador', 'Soyapango', 'Mejicanos'],
-  'La Libertad': ['Santa Tecla', 'Antiguo Cuscatlán'],
-  'Santa Ana': ['Santa Ana', 'Metapán']
-};
+import { getDepartamentos } from '../services/fetchDepartamentos';
 
 export function CrearEmpleado() {
+
   const [formData, setFormData] = useState({
     nombres: '',
     apellidos: '',
@@ -28,6 +23,45 @@ export function CrearEmpleado() {
     departamento: '',
     municipio: ''
   });
+
+  const [departamentos, setDepartamentos] = useState([])
+  const [municipios, setMunicipios] = useState([])
+
+  useEffect(() => {
+    async function cargarDepartamentos() {
+      const data = await getDepartamentos()
+      setDepartamentos(data)
+    }
+
+    cargarDepartamentos()
+  }, [])
+
+  const handleDepartamentoChange = (e) => {
+    const departamentoSeleccionado = (e.target.value)
+    const departamentoFromEstado = departamentos.find((dep) => dep.nombre === departamentoSeleccionado)
+
+    setFormData({
+      ...formData,
+      departamento: departamentoFromEstado.nombre,
+      municipio: ''
+    })
+    console.log(departamentoFromEstado.departamento_id)
+
+    setMunicipios(departamentoFromEstado?.Municipios || [])
+  }
+
+  const handleMunicipioChange = (e) => {
+    const municipioSeleccionado = e.target.value
+    const municipiosFromEstado = municipios.find(muni => muni.nombre === municipioSeleccionado)
+    
+    setFormData({
+      ...formData,
+      municipio: municipiosFromEstado.nombre
+    })
+
+    console.log(municipiosFromEstado.municipio_id)
+  }
+
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -149,12 +183,12 @@ export function CrearEmpleado() {
                         select
                         fullWidth
                         value={formData.departamento}
-                        onChange={handleChange}
+                        onChange={handleDepartamentoChange}
                         sx={{my: 2}}
                     >
-                        {departamentos.map((dep) => (
-                        <MenuItem key={dep} value={dep}>
-                            {dep}
+                        {departamentos.map(({departamento_id, nombre}) => (
+                        <MenuItem key={departamento_id} value={nombre}>
+                            {nombre}
                         </MenuItem>
                         ))}
                     </TextField>
@@ -169,13 +203,13 @@ export function CrearEmpleado() {
                         select
                         fullWidth
                         value={formData.municipio}
-                        onChange={handleChange}
+                        onChange={handleMunicipioChange}
                         disabled={!formData.departamento}
                         sx={{my: 2}}
                     >
-                        {(municipios[formData.departamento] || []).map((mun) => (
-                        <MenuItem key={mun} value={mun}>
-                            {mun}
+                        {municipios.map(({nombre}) => (
+                        <MenuItem key={nombre} value={nombre}>
+                            {nombre}
                         </MenuItem>
                         ))}
                     </TextField>
