@@ -18,9 +18,44 @@ import {
 } from '@mui/icons-material';
 import { ListaEmpleados } from '../components/ListaEmpleados';
 import { Link } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { getDepartamentos } from '../services/fetchDepartamentos';
 
 
 export function Empleados () {
+
+
+  const [departamentos, setDepartamentos] = useState([])
+  const [municipios, setMunicipios] = useState([])
+  const [tempSelect, setTempSelect] = useState({departamento: '', municipio: ''})
+  
+  const handleDepartamentoChange = (e) => {
+    const departamentoSeleccionado = e.target.value
+    const departamentoFromEstado = departamentos.find(dep => dep.nombre === departamentoSeleccionado)
+
+    setTempSelect({...tempSelect, departamento: departamentoSeleccionado})
+
+    setMunicipios(departamentoFromEstado.Municipios)
+  }
+
+  const handleMunicipioChange = e => {
+    const municipioSeleccionado = e.target.value
+
+    setTempSelect({
+      ...tempSelect,
+      municipio: municipioSeleccionado
+    })
+  }
+
+
+  useEffect(() => {
+    async function cargarDepartamentos() {
+      const data = await getDepartamentos()
+      setDepartamentos(data)
+    }
+
+    cargarDepartamentos()
+  }, [])
 
   return (
     <Container maxWidth="lg">
@@ -42,23 +77,38 @@ export function Empleados () {
           </Grid>
           
           <Grid sx={{width:"150px"}}>
-            <FormControl fullWidth>
-              <InputLabel>Departamento</InputLabel>
-              <Select
+              <TextField
+                name='departamento'
                 label="Departamento"
+                select
+                fullWidth
+                value={tempSelect.departamento}
+                onChange={handleDepartamentoChange}
               >
-                <MenuItem>Todo fetch Departamentos</MenuItem>
-              </Select>
-            </FormControl>
+                {
+                  departamentos.map(({departamento_id, nombre}) => (
+                    <MenuItem key={departamento_id} value={nombre}>{nombre}</MenuItem>
+                  ))
+                }
+              </TextField>
           </Grid>
           
           <Grid sx={{width:"150px"}}>
-            <FormControl fullWidth>
-              <InputLabel>Municipios</InputLabel>
-              <Select label="Municipios">
-                  <MenuItem>fetch municipios</MenuItem>
-              </Select>
-            </FormControl>
+              <TextField 
+              name="municipios"
+              label="Municipios"
+              select
+              value={tempSelect.municipio}
+              fullWidth
+              disabled={!tempSelect.departamento}
+              onChange={handleMunicipioChange}
+              >
+                  {
+                    municipios.map(({nombre}) => (
+                      <MenuItem key={nombre} value={nombre}>{nombre}</MenuItem>
+                    ))
+                  }
+              </TextField>
           </Grid>
 
           <Grid sx={{marginLeft: 'auto'}}>
@@ -74,22 +124,6 @@ export function Empleados () {
             <Typography variant="body2" color="text.secondary" gutterBottom>
               Filtros activos:
             </Typography>
-            <Stack direction="row" spacing={1} flexWrap="wrap">
-                {
-                    /**
-                     * getFilterSummary().map((filter, index) => (
-                <Chip
-                  key={index}
-                  label={filter}
-                  size="small"
-                  color="primary"
-                  variant="outlined"
-                />
-              ))
-                     */
-                }
-              
-            </Stack>
           </Box>
         )}
       </Paper>
