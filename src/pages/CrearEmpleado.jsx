@@ -5,11 +5,11 @@ import {
   TextField,
   Button,
   MenuItem,
-  Typography,
   Paper,
   Snackbar,
   Alert,
 } from '@mui/material';
+import { Link } from 'react-router-dom';
 import { yupEmpleadoSchema } from '../validations/yupEmpleado';
 import { getDepartamentos } from '../services/fetchDepartamentos';
 import { postEmpleado } from '../services/fetchEmpleados';
@@ -125,12 +125,14 @@ export function CrearEmpleado() {
       minHeight="100vh"
       bgcolor="#f4f4f4"
     >
-      <Paper elevation={3} sx={{ padding: 4, maxWidth: 800, width: '100%' }}>
-        <Typography variant="h5" gutterBottom>
-          Formulario de Registro
-        </Typography>
+      <Paper elevation={3} sx={{ p: 4, maxWidth: 500, width: '100%' }}>
+        <Button variant='contained' sx={{mb: 2}}>
+          <Link to="/empleados">
+            Regresar
+          </Link>
+        </Button>
 
-        <form onSubmit={handleSubmit}>
+        <Box component="form" onSubmit={handleSubmit}>
 
             <Grid container spacing={2}>
                 <Grid size={6}>
@@ -140,6 +142,7 @@ export function CrearEmpleado() {
                         name="nombres"
                         label="Nombres"
                         fullWidth
+                        required
                         value={formData.nombres}
                         onChange={handleChange}
                     />
@@ -151,6 +154,7 @@ export function CrearEmpleado() {
                         name="apellidos"
                         label="Apellidos"
                         fullWidth
+                        required
                         value={formData.apellidos}
                         onChange={handleChange}
                     />
@@ -165,6 +169,7 @@ export function CrearEmpleado() {
                 type="date"
                 InputLabelProps={{ shrink: true }}
                 fullWidth
+                required
                 value={formData.fecha_nacimiento}
                 onChange={handleChange}
                 sx={{my: 2}}
@@ -175,6 +180,7 @@ export function CrearEmpleado() {
                 name="direccion"
                 label="Dirección"
                 fullWidth
+                required
                 value={formData.direccion}
                 onChange={handleChange}
                 sx={{my: 2}}
@@ -185,6 +191,8 @@ export function CrearEmpleado() {
                 name="telefono"
                 label="Teléfono"
                 fullWidth
+                required
+                type="number"
                 value={formData.telefono}
                 onChange={handleChange}
                 sx={{my: 2}}
@@ -195,6 +203,7 @@ export function CrearEmpleado() {
                 name="correo_electronico"
                 label="Correo electrónico"
                 fullWidth
+                required
                 value={formData.correo_electronico}
                 onChange={handleChange}
                 sx={{my: 2}}
@@ -208,6 +217,7 @@ export function CrearEmpleado() {
                         label="Departamento"
                         select
                         fullWidth
+                        required
                         value={tempSelect.departamento}
                         onChange={handleDepartamentoChange}
                         sx={{my: 2}}
@@ -228,6 +238,7 @@ export function CrearEmpleado() {
                         label="Municipio"
                         select
                         fullWidth
+                        required
                         value={tempSelect.municipio}
                         onChange={handleMunicipioChange}
                         disabled={!formData.departamento_id}
@@ -246,9 +257,9 @@ export function CrearEmpleado() {
 
             {/* Botón de enviar */}
               <Button type="submit" variant="contained" color="primary" fullWidth>
-                Enviar
+                Registar
               </Button>
-        </form>
+        </Box>
       </Paper>
 
 
