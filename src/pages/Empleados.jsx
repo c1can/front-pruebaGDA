@@ -9,13 +9,15 @@ import {
   MenuItem,
   Typography,
   Paper,
-  Stack
+  Stack,
+  Button
 } from '@mui/material';
 import {
   Search as SearchIcon,
   FilterList as FilterIcon
 } from '@mui/icons-material';
 import { ListaEmpleados } from '../components/ListaEmpleados';
+import { Link } from 'react-router-dom';
 
 
 export function Empleados () {
@@ -57,6 +59,12 @@ export function Empleados () {
                   <MenuItem>fetch municipios</MenuItem>
               </Select>
             </FormControl>
+          </Grid>
+
+          <Grid sx={{marginLeft: 'auto'}}>
+            <Button variant='contained'>
+              <Link to="nuevo/">Agregar Empleado</Link>
+            </Button>
           </Grid>
         </Grid>
 
