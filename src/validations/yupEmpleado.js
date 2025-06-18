@@ -10,6 +10,6 @@ export const yupEmpleadoSchema = yup.object().shape({
   direccion: yup.string().required("La dirección es requerida"),
   telefono: yup.string().matches(/^[0-9]{8,15}$/, "Teléfono inválido").required("El teléfono es obligatorio"),
   correo_electronico: yup.string().email("Correo no válido").required("El correo es obligatorio"),
-  departamento: yup.number().required("Seleccione un departamento"),
-  municipio: yup.number().required("Seleccione un municipio"),
+  departamento_id: yup.number().required("Seleccione un departamento"),
+  municipio_id: yup.number().required("Seleccione un municipio"),
 });

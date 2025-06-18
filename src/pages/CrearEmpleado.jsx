@@ -10,6 +10,7 @@ import {
 } from '@mui/material';
 import { yupEmpleadoSchema } from '../validations/yupEmpleado';
 import { getDepartamentos } from '../services/fetchDepartamentos';
+import { postEmpleado } from '../services/fetchEmpleados';
 
 export function CrearEmpleado() {
 
@@ -20,9 +21,11 @@ export function CrearEmpleado() {
     direccion: '',
     telefono: '',
     correo_electronico: '',
-    departamento: '',
-    municipio: ''
+    departamento_id: '',
+    municipio_id: ''
   });
+
+  const [tempSelect, setTempSelect] = useState({departamento: '', municipio: ''})
 
   const [departamentos, setDepartamentos] = useState([])
   const [municipios, setMunicipios] = useState([])
@@ -40,26 +43,35 @@ export function CrearEmpleado() {
     const departamentoSeleccionado = (e.target.value)
     const departamentoFromEstado = departamentos.find((dep) => dep.nombre === departamentoSeleccionado)
 
+
+    setTempSelect({
+      ...tempSelect,
+      departamento: departamentoFromEstado.nombre
+    })
+
     setFormData({
       ...formData,
-      departamento: departamentoFromEstado.nombre,
-      municipio: ''
+      departamento_id: departamentoFromEstado.departamento_id,
+      municipio_id: ''
     })
-    console.log(departamentoFromEstado.departamento_id)
 
-    setMunicipios(departamentoFromEstado?.Municipios || [])
+    setMunicipios(departamentoFromEstado.Municipios)
   }
 
   const handleMunicipioChange = (e) => {
     const municipioSeleccionado = e.target.value
     const municipiosFromEstado = municipios.find(muni => muni.nombre === municipioSeleccionado)
     
-    setFormData({
-      ...formData,
+    setTempSelect({
+      ...tempSelect,
       municipio: municipiosFromEstado.nombre
     })
 
-    console.log(municipiosFromEstado.municipio_id)
+    setFormData({
+      ...formData,
+      municipio_id: municipiosFromEstado.municipio_id
+    })
+
   }
 
 
@@ -77,10 +89,12 @@ export function CrearEmpleado() {
 
     try {
       const isValid = await yupEmpleadoSchema.validate(formData)
-      console.log(isValid)   
+      //console.log(isValid)   
 
       if(isValid) {
-        console.log("datos enviados")
+        const response = await postEmpleado(formData)
+        console.log(response)
+        //console.log("datos enviados")
       }
     } catch (error) {
       console.log(error)
@@ -182,7 +196,7 @@ export function CrearEmpleado() {
                         label="Departamento"
                         select
                         fullWidth
-                        value={formData.departamento}
+                        value={tempSelect.departamento}
                         onChange={handleDepartamentoChange}
                         sx={{my: 2}}
                     >
@@ -202,9 +216,9 @@ export function CrearEmpleado() {
                         label="Municipio"
                         select
                         fullWidth
-                        value={formData.municipio}
+                        value={tempSelect.municipio}
                         onChange={handleMunicipioChange}
-                        disabled={!formData.departamento}
+                        disabled={!formData.departamento_id}
                         sx={{my: 2}}
                     >
                         {municipios.map(({nombre}) => (
