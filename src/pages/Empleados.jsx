@@ -2,14 +2,10 @@ import {
   Container,
   Box,
   Grid,
-  InputLabel,
   TextField,
-  FormControl,
-  Select,
   MenuItem,
   Typography,
   Paper,
-  Stack,
   Button
 } from '@mui/material';
 import {
@@ -28,9 +24,14 @@ export function Empleados () {
   const [departamentos, setDepartamentos] = useState([])
   const [municipios, setMunicipios] = useState([])
   const [tempSelect, setTempSelect] = useState({departamento: '', municipio: ''})
+  const [filtro, setFiltro] = useState('')
   
   const handleDepartamentoChange = (e) => {
     const departamentoSeleccionado = e.target.value
+    
+    /**Esto lo hago para poder recuperar el el objeto completo del departamento
+     * seleccionado ya que necesito el objeto municipios anidaddo
+     */
     const departamentoFromEstado = departamentos.find(dep => dep.nombre === departamentoSeleccionado)
 
     setTempSelect({...tempSelect, departamento: departamentoSeleccionado})
@@ -58,7 +59,7 @@ export function Empleados () {
   }, [])
 
   return (
-    <Container maxWidth="lg">
+    <Container maxWidth="lg" sx={{pb: 6}}>
       {/* Seccion de Filtros*/}
       <Paper elevation={1} sx={{py: 2, mb: 3 }}>
         <Typography variant="h6" gutterBottom sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
@@ -71,8 +72,8 @@ export function Empleados () {
             <TextField
               fullWidth
               placeholder="Buscar empleados..."
-              //value={searchTerm}
-              //onChange={(e) => setSearchTerm(e.target.value)}
+              value={filtro}
+              onChange={(e) => setFiltro(e.target.value)}
             />
           </Grid>
           
@@ -85,6 +86,7 @@ export function Empleados () {
                 value={tempSelect.departamento}
                 onChange={handleDepartamentoChange}
               >
+                <MenuItem value="">Todos</MenuItem>
                 {
                   departamentos.map(({departamento_id, nombre}) => (
                     <MenuItem key={departamento_id} value={nombre}>{nombre}</MenuItem>
@@ -128,7 +130,7 @@ export function Empleados () {
         )}
       </Paper>
 
-        <ListaEmpleados />
+        <ListaEmpleados filtro={filtro} filtroDepYMuni={tempSelect}/>
     </Container>
   );
 };

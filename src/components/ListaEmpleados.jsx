@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react"
-import { initialEmployees } from "../mocks/empleados"
 import { TarjetaEmpleado } from "./TarjetaEmpleado"
 import { Grid, Box, Typography } from "@mui/material"
 import { AccountBox } from "@mui/icons-material"
 import { getEmpleados } from "../services/fetchEmpleados"
 
-export function ListaEmpleados() {
-    const [empleados, setEmpleados] = useState([])
+export function ListaEmpleados({ filtro, filtroDepYMuni }) {
 
+    const [empleados, setEmpleados] = useState([])
+    
     useEffect(() => {
         async function cargarEmpleados() {
             try {
@@ -17,9 +17,24 @@ export function ListaEmpleados() {
                 console.log("Algo salio mal ", error)
             }
         }
-
+        
         cargarEmpleados()
     }, [])
+    
+    //filtroDepYMuni = {departamento: '', municipio: ''}
+    const { departamento, municipio } = filtroDepYMuni
+
+    const empleadosFiltrados = empleados.filter(empleado => {
+
+        const textoCompleto = `${empleado.nombres} ${empleado.apellidos}`
+
+        const coincideNombre = textoCompleto.toLowerCase().includes(filtro.toLowerCase());
+        const coincideDepartamento = departamento ? empleado.Departamento.nombre === departamento :true
+        const coincideMunicipio = municipio ? empleado.Municipio.nombre === municipio: true
+
+
+       return coincideNombre && coincideDepartamento && coincideMunicipio
+    })
 
 
     return(
@@ -29,7 +44,7 @@ export function ListaEmpleados() {
                 Lista de Empleados
             </Typography>
             <Grid container spacing={3}>
-                {empleados.map(empleado => (
+                {empleadosFiltrados.map(empleado => (
                     <Grid key={empleado.telefono} size={{xs: 6, md: 4}}>
                         <TarjetaEmpleado empleado={empleado} />
                     </Grid>
