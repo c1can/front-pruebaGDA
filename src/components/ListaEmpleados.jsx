@@ -7,17 +7,17 @@ import { getEmpleados } from "../services/fetchEmpleados"
 export function ListaEmpleados({ filtro, filtroDepYMuni }) {
 
     const [empleados, setEmpleados] = useState([])
+
+    async function cargarEmpleados() {
+        try {
+            const data = await getEmpleados()
+            setEmpleados(data)
+        } catch (error) {
+            console.log(`Algo salio mal ${error}`)
+        }
+    }
     
     useEffect(() => {
-        async function cargarEmpleados() {
-            try {
-                const data = await getEmpleados()
-                setEmpleados(data)
-            } catch (error) {
-                console.log("Algo salio mal ", error)
-            }
-        }
-        
         cargarEmpleados()
     }, [])
     
@@ -46,7 +46,7 @@ export function ListaEmpleados({ filtro, filtroDepYMuni }) {
             <Grid container spacing={3}>
                 {empleadosFiltrados.map(empleado => (
                     <Grid key={empleado.empleado_id} size={{xs: 6, md: 4}}>
-                        <TarjetaEmpleado empleado={empleado} />
+                        <TarjetaEmpleado empleado={empleado} fetchEmpleados={cargarEmpleados}/>
                     </Grid>
                 ))}
             </Grid>

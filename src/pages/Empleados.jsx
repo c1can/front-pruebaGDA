@@ -48,13 +48,11 @@ export function Empleados () {
     })
   }
 
-
   useEffect(() => {
     async function cargarDepartamentos() {
       const data = await getDepartamentos()
       setDepartamentos(data)
     }
-
     cargarDepartamentos()
   }, [])
 
@@ -130,7 +128,7 @@ export function Empleados () {
         )}
       </Paper>
 
-        <ListaEmpleados filtro={filtro} filtroDepYMuni={tempSelect}/>
+        <ListaEmpleados filtro={filtro} filtroDepYMuni={tempSelect} />
     </Container>
   );
 };

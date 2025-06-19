@@ -6,7 +6,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import { deleteEmpleado } from '../services/fetchEmpleados';
 import { useState } from 'react';
 
-export function AlertaEliminar({ open, setOpen, empleadoID }) {
+export function AlertaEliminar({ open, setOpen, empleadoID, recargarEmpleados }) {
 
     const [snackStatus, setSnackStatus] = useState(false)
     const [message, setMessage] = useState('')
@@ -22,6 +22,8 @@ export function AlertaEliminar({ open, setOpen, empleadoID }) {
           setOpen(false)
           setSnackStatus(true)
           setMessage(result.message)
+          //aqui volver a llamar al setEmpleados para que actualize el estado de empleados
+          recargarEmpleados()
     }catch(error) {
         console.log("algo malio sal")
     }

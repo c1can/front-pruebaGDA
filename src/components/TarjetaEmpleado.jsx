@@ -20,7 +20,7 @@ import { useState } from 'react';
 import { AlertaEliminar } from './AlertaEliminar';
 
 
-export const TarjetaEmpleado = ({empleado}) =>{
+export const TarjetaEmpleado = ({empleado, fetchEmpleados }) =>{
 
 
   const [open, setOpen] = useState(false)
@@ -141,7 +141,7 @@ export const TarjetaEmpleado = ({empleado}) =>{
         </IconButton>
       </Box>
 
-      <AlertaEliminar open={open} setOpen={setOpen} empleadoID={empleado.empleado_id}/>
+      <AlertaEliminar open={open} setOpen={setOpen} empleadoID={empleado.empleado_id} recargarEmpleados={fetchEmpleados}/>
     </Card>
   );
 };
