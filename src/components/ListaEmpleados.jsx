@@ -45,7 +45,7 @@ export function ListaEmpleados({ filtro, filtroDepYMuni }) {
             </Typography>
             <Grid container spacing={3}>
                 {empleadosFiltrados.map(empleado => (
-                    <Grid key={empleado.telefono} size={{xs: 6, md: 4}}>
+                    <Grid key={empleado.empleado_id} size={{xs: 6, md: 4}}>
                         <TarjetaEmpleado empleado={empleado} />
                     </Grid>
                 ))}

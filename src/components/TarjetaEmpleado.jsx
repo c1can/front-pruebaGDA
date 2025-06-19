@@ -16,9 +16,18 @@ import {
   Work as WorkIcon,
   CalendarToday as CalendarIcon
 } from '@mui/icons-material';
+import { useState } from 'react';
+import { AlertaEliminar } from './AlertaEliminar';
 
 
 export const TarjetaEmpleado = ({empleado}) =>{
+
+
+  const [open, setOpen] = useState(false)
+
+  const handleClick = () => {
+    setOpen(true)
+  }
 
     const formatDate = (dateString) => {
     return new Date(dateString).toLocaleDateString('es-ES', {
@@ -44,7 +53,6 @@ export const TarjetaEmpleado = ({empleado}) =>{
       <CardContent sx={{ flexGrow: 1, p: 3 }}>
         <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
           <Avatar
-            src={empleado.apellidos}
             sx={{ 
               width: 60, 
               height: 60, 
@@ -54,7 +62,6 @@ export const TarjetaEmpleado = ({empleado}) =>{
               fontWeight: 'bold'
             }}
           >
-            {empleado.nombres}{empleado.apellidos}
           </Avatar>
           <Box sx={{ flexGrow: 1 }}>
             <Typography variant="h6" component="h3" fontWeight="bold">
@@ -120,7 +127,7 @@ export const TarjetaEmpleado = ({empleado}) =>{
           <EditIcon fontSize="small" />
         </IconButton>
         <IconButton
-          onClick={() => onDelete(empleado.id)}
+          onClick={handleClick}
           color="error"
           size="small"
           sx={{ 
@@ -133,6 +140,8 @@ export const TarjetaEmpleado = ({empleado}) =>{
           <DeleteIcon fontSize="small" />
         </IconButton>
       </Box>
+
+      <AlertaEliminar open={open} setOpen={setOpen} empleadoID={empleado.empleado_id}/>
     </Card>
   );
 };
