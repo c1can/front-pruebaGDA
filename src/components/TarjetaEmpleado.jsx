@@ -18,15 +18,21 @@ import {
 } from '@mui/icons-material';
 import { useState } from 'react';
 import { AlertaEliminar } from './AlertaEliminar';
+import { EditarEmpleado } from './EditarEmpleado';
 
 
 export const TarjetaEmpleado = ({empleado, fetchEmpleados }) =>{
 
 
   const [open, setOpen] = useState(false)
+  const [openEdit, setOpenEdit] = useState(false)
 
   const handleClick = () => {
     setOpen(true)
+  }
+  
+  const handleClickEditEmpleado = () => {
+    setOpenEdit(true)
   }
 
     const formatDate = (dateString) => {
@@ -114,7 +120,7 @@ export const TarjetaEmpleado = ({empleado, fetchEmpleados }) =>{
         gap: 1
       }}>
         <IconButton
-          onClick={() => onEdit(empleado)}
+          onClick={handleClickEditEmpleado}
           color="primary"
           size="small"
           sx={{ 
@@ -142,6 +148,7 @@ export const TarjetaEmpleado = ({empleado, fetchEmpleados }) =>{
       </Box>
 
       <AlertaEliminar open={open} setOpen={setOpen} empleadoID={empleado.empleado_id} recargarEmpleados={fetchEmpleados}/>
+      <EditarEmpleado open={openEdit} setOpen={setOpenEdit} empleado={empleado} recargarEmpleados={fetchEmpleados} />
     </Card>
   );
 };

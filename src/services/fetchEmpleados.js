@@ -42,3 +42,19 @@ export async function deleteEmpleado(id) {
         console.log(`Algo salio mal al querer eliminar usuario: ${error}`)
     }
 }
+
+export async function editEmpleado(id, body) {
+    try {
+        const response = await fetch(`${apiURL}/api/empleados/${id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(body)
+        })
+        const result = await response.json()
+        return result
+    } catch (error) {
+        console.log(`Algo salio mal al querer eliminar el usuario ${error}`)
+    }
+}
