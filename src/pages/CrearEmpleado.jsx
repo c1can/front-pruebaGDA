@@ -103,6 +103,15 @@ export function CrearEmpleado() {
         setMensaje("Empleado agregado correctamente")
         setTipoAlerta('success')
         setOpen(true)
+        setFormData({nombres: '',
+          apellidos: '',
+          fecha_nacimiento: '',
+          direccion: '',
+          telefono: '',
+          correo_electronico: '',
+          departamento_id: '',
+          municipio_id: ''
+        })
         //console.log("datos enviados")
       }
     } catch (error) {
