@@ -4,7 +4,6 @@ import {
   Grid,
   TextField,
   Button,
-  MenuItem,
   Paper,
   Snackbar,
   Alert,
@@ -13,6 +12,7 @@ import { Link } from 'react-router-dom';
 import { yupEmpleadoSchema } from '../validations/yupEmpleado';
 import { getDepartamentos } from '../services/fetchDepartamentos';
 import { postEmpleado } from '../services/fetchEmpleados';
+import { AutocompleteDepartamento, AutocompleteMunicipio } from '../components/AutocompleteDepMun';
 
 export function CrearEmpleado() {
 
@@ -46,8 +46,8 @@ export function CrearEmpleado() {
     cargarDepartamentos()
   }, [])
 
-  const handleDepartamentoChange = (e) => {
-    const departamentoSeleccionado = (e.target.value)
+  const handleDepartamentoChange = (e, value) => {
+    const departamentoSeleccionado = (value)
     const departamentoFromEstado = departamentos.find((dep) => dep.nombre === departamentoSeleccionado)
 
 
@@ -65,8 +65,8 @@ export function CrearEmpleado() {
     setMunicipios(departamentoFromEstado.Municipios)
   }
 
-  const handleMunicipioChange = (e) => {
-    const municipioSeleccionado = e.target.value
+  const handleMunicipioChange = (e, value) => {
+    const municipioSeleccionado = value
     const municipiosFromEstado = municipios.find(muni => muni.nombre === municipioSeleccionado)
     
     setTempSelect({
@@ -235,47 +235,40 @@ export function CrearEmpleado() {
               />
               {errores.correo_electronico && <div style={{color:'red', fontSize:13}}>{errores.correo_electronico}</div>}
 
-              <Grid container spacing={2}>
+              <Grid container spacing={2} sx={{mb: 2}}>
                 <Grid size={6}>
                     {/* Departamento */}
-                    <TextField
-                        name="departamento"
-                        label="Departamento"
-                        select
-                        fullWidth
-                        value={tempSelect.departamento}
-                        onChange={handleDepartamentoChange}
-                        sx={{my: 2}}
-                        error={!!errores.departamento}
-                    >
-                        {departamentos.map(({departamento_id, nombre}) => (
-                        <MenuItem key={departamento_id} value={nombre}>
-                            {nombre}
-                        </MenuItem>
-                        ))}
-                    </TextField>
+                    <AutocompleteDepartamento
+                      departamentos={departamentos}
+                      value={tempSelect.departamento}
+                      onChange={(nombre) => {
+                        const departamentoFromEstado = departamentos.find(dep => dep.nombre === nombre);
+                        setTempSelect({ ...tempSelect, departamento: nombre, municipio: '' });
+                        setFormData({
+                          ...formData,
+                          departamento_id: departamentoFromEstado ? departamentoFromEstado.departamento_id : '',
+                          municipio_id: ''
+                        });
+                        setMunicipios(departamentoFromEstado ? departamentoFromEstado.Municipios : []);
+                      }}
+                    />
                     {errores.departamento && <div style={{color:'red', fontSize:13}}>{errores.departamento}</div>}
                 </Grid>
                 <Grid size={6}>
-
                     {/* Municipio */}
-                    <TextField
-                        name="municipio"
-                        label="Municipio"
-                        select
-                        fullWidth
-                        value={tempSelect.municipio}
-                        onChange={handleMunicipioChange}
-                        disabled={!formData.departamento_id}
-                        sx={{my: 2}}
-                        error={!!errores.municipio}
-                    >
-                        {municipios.map(({nombre}) => (
-                        <MenuItem key={nombre} value={nombre}>
-                            {nombre}
-                        </MenuItem>
-                        ))}
-                    </TextField>
+                    <AutocompleteMunicipio
+                      municipios={municipios}
+                      value={tempSelect.municipio}
+                      onChange={(nombre) => {
+                        const municipiosFromEstado = municipios.find(muni => muni.nombre === nombre);
+                        setTempSelect({ ...tempSelect, municipio: nombre });
+                        setFormData({
+                          ...formData,
+                          municipio_id: municipiosFromEstado ? municipiosFromEstado.municipio_id : ''
+                        });
+                      }}
+                      disabled={!formData.departamento_id}
+                    />
                     {errores.municipio && <div style={{color:'red', fontSize:13}}>{errores.municipio}</div>}
                 </Grid>
               </Grid>

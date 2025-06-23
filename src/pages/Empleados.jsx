@@ -16,6 +16,7 @@ import { ListaEmpleados } from '../components/ListaEmpleados';
 import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { getDepartamentos } from '../services/fetchDepartamentos';
+import { AutocompleteDepartamento, AutocompleteMunicipio } from '../components/AutocompleteDepMun';
 
 
 export function Empleados () {
@@ -76,39 +77,24 @@ export function Empleados () {
           </Grid>
           
           <Grid sx={{width:"150px"}}>
-              <TextField
-                name='departamento'
-                label="Departamento"
-                select
-                fullWidth
+              <AutocompleteDepartamento
+                departamentos={departamentos}
                 value={tempSelect.departamento}
-                onChange={handleDepartamentoChange}
-              >
-                <MenuItem value="">Todos</MenuItem>
-                {
-                  departamentos.map(({departamento_id, nombre}) => (
-                    <MenuItem key={departamento_id} value={nombre}>{nombre}</MenuItem>
-                  ))
-                }
-              </TextField>
+                onChange={(nombre) => {
+                  const departamentoFromEstado = departamentos.find(dep => dep.nombre === nombre);
+                  setTempSelect({...tempSelect, departamento: nombre, municipio: ''});
+                  setMunicipios(departamentoFromEstado ? departamentoFromEstado.Municipios : []);
+                }}
+              />
           </Grid>
           
           <Grid sx={{width:"150px"}}>
-              <TextField 
-              name="municipios"
-              label="Municipios"
-              select
-              value={tempSelect.municipio}
-              fullWidth
-              disabled={!tempSelect.departamento}
-              onChange={handleMunicipioChange}
-              >
-                  {
-                    municipios.map(({nombre}) => (
-                      <MenuItem key={nombre} value={nombre}>{nombre}</MenuItem>
-                    ))
-                  }
-              </TextField>
+              <AutocompleteMunicipio
+                municipios={municipios}
+                value={tempSelect.municipio}
+                onChange={(nombre) => setTempSelect({...tempSelect, municipio: nombre})}
+                disabled={!tempSelect.departamento}
+              />
           </Grid>
 
           <Grid sx={{marginLeft: 'auto'}}>
