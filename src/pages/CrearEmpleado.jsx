@@ -35,6 +35,7 @@ export function CrearEmpleado() {
   const [open, setOpen] = useState(false)
   const [mensaje, setMensaje] = useState('')
   const [tipoAlerta, setTipoAlerta] = useState('success')
+  const [errores, setErrores] = useState({});
 
   useEffect(() => {
     async function cargarDepartamentos() {
@@ -92,7 +93,18 @@ export function CrearEmpleado() {
 
   const handleSubmit = async(e) => {
     e.preventDefault()
-
+    let nuevosErrores = {};
+    // Validación manual de campos requeridos
+    if (!formData.nombres) nuevosErrores.nombres = 'Este campo es requerido';
+    if (!formData.apellidos) nuevosErrores.apellidos = 'Este campo es requerido';
+    if (!formData.fecha_nacimiento) nuevosErrores.fecha_nacimiento = 'Este campo es requerido';
+    if (!formData.direccion) nuevosErrores.direccion = 'Este campo es requerido';
+    if (!formData.telefono) nuevosErrores.telefono = 'Este campo es requerido';
+    if (!formData.correo_electronico) nuevosErrores.correo_electronico = 'Este campo es requerido';
+    if (!formData.departamento_id) nuevosErrores.departamento = 'Este campo es requerido';
+    if (!formData.municipio_id) nuevosErrores.municipio = 'Este campo es requerido';
+    setErrores(nuevosErrores);
+    if (Object.keys(nuevosErrores).length > 0) return;
     try {
       const isValid = await yupEmpleadoSchema.validate(formData)
       //console.log(isValid)   
@@ -145,16 +157,16 @@ export function CrearEmpleado() {
 
             <Grid container spacing={2}>
                 <Grid size={6}>
-
                     {/* Nombres */}
                     <TextField
                         name="nombres"
                         label="Nombres"
                         fullWidth
-                        required
                         value={formData.nombres}
                         onChange={handleChange}
+                        error={!!errores.nombres}
                     />
+                    {errores.nombres && <div style={{color:'red', fontSize:13}}>{errores.nombres}</div>}
                 </Grid>
 
                 <Grid size={6}>
@@ -163,10 +175,11 @@ export function CrearEmpleado() {
                         name="apellidos"
                         label="Apellidos"
                         fullWidth
-                        required
                         value={formData.apellidos}
                         onChange={handleChange}
+                        error={!!errores.apellidos}
                     />
+                    {errores.apellidos && <div style={{color:'red', fontSize:13}}>{errores.apellidos}</div>}
                 </Grid>
             </Grid>
 
@@ -178,45 +191,49 @@ export function CrearEmpleado() {
                 type="date"
                 InputLabelProps={{ shrink: true }}
                 fullWidth
-                required
                 value={formData.fecha_nacimiento}
                 onChange={handleChange}
                 sx={{my: 2}}
+                error={!!errores.fecha_nacimiento}
               />
+              {errores.fecha_nacimiento && <div style={{color:'red', fontSize:13}}>{errores.fecha_nacimiento}</div>}
 
             {/* Dirección */}
               <TextField
                 name="direccion"
                 label="Dirección"
                 fullWidth
-                required
                 value={formData.direccion}
                 onChange={handleChange}
                 sx={{my: 2}}
+                error={!!errores.direccion}
               />
+              {errores.direccion && <div style={{color:'red', fontSize:13}}>{errores.direccion}</div>}
 
             {/* Teléfono */}
               <TextField
                 name="telefono"
                 label="Teléfono"
                 fullWidth
-                required
                 type="number"
                 value={formData.telefono}
                 onChange={handleChange}
                 sx={{my: 2}}
+                error={!!errores.telefono}
               />
+              {errores.telefono && <div style={{color:'red', fontSize:13}}>{errores.telefono}</div>}
 
             {/* Correo electrónico */}
               <TextField
                 name="correo_electronico"
                 label="Correo electrónico"
                 fullWidth
-                required
                 value={formData.correo_electronico}
                 onChange={handleChange}
                 sx={{my: 2}}
+                error={!!errores.correo_electronico}
               />
+              {errores.correo_electronico && <div style={{color:'red', fontSize:13}}>{errores.correo_electronico}</div>}
 
               <Grid container spacing={2}>
                 <Grid size={6}>
@@ -226,10 +243,10 @@ export function CrearEmpleado() {
                         label="Departamento"
                         select
                         fullWidth
-                        required
                         value={tempSelect.departamento}
                         onChange={handleDepartamentoChange}
                         sx={{my: 2}}
+                        error={!!errores.departamento}
                     >
                         {departamentos.map(({departamento_id, nombre}) => (
                         <MenuItem key={departamento_id} value={nombre}>
@@ -237,7 +254,7 @@ export function CrearEmpleado() {
                         </MenuItem>
                         ))}
                     </TextField>
-
+                    {errores.departamento && <div style={{color:'red', fontSize:13}}>{errores.departamento}</div>}
                 </Grid>
                 <Grid size={6}>
 
@@ -247,11 +264,11 @@ export function CrearEmpleado() {
                         label="Municipio"
                         select
                         fullWidth
-                        required
                         value={tempSelect.municipio}
                         onChange={handleMunicipioChange}
                         disabled={!formData.departamento_id}
                         sx={{my: 2}}
+                        error={!!errores.municipio}
                     >
                         {municipios.map(({nombre}) => (
                         <MenuItem key={nombre} value={nombre}>
@@ -259,6 +276,7 @@ export function CrearEmpleado() {
                         </MenuItem>
                         ))}
                     </TextField>
+                    {errores.municipio && <div style={{color:'red', fontSize:13}}>{errores.municipio}</div>}
                 </Grid>
               </Grid>
 
