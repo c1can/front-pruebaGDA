@@ -31,9 +31,10 @@ export function ListaEmpleados({ filtro, filtroDepYMuni }) {
         const coincideNombre = textoCompleto.toLowerCase().includes(filtro.toLowerCase());
         const coincideDepartamento = departamento ? empleado.Departamento.nombre === departamento :true
         const coincideMunicipio = municipio ? empleado.Municipio.nombre === municipio: true
+        const estaActivo = empleado.activo === true
 
 
-       return coincideNombre && coincideDepartamento && coincideMunicipio
+       return coincideNombre && coincideDepartamento && coincideMunicipio && estaActivo
     })
 
 

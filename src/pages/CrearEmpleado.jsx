@@ -23,6 +23,7 @@ export function CrearEmpleado() {
     direccion: '',
     telefono: '',
     correo_electronico: '',
+    activo: true,
     departamento_id: '',
     municipio_id: ''
   });
@@ -107,7 +108,7 @@ export function CrearEmpleado() {
     if (Object.keys(nuevosErrores).length > 0) return;
     try {
       const isValid = await yupEmpleadoSchema.validate(formData)
-      //console.log(isValid)   
+      console.log(isValid)   
 
       if(isValid) {
         const response = await postEmpleado(formData)

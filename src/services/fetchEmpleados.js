@@ -31,10 +31,14 @@ export async function postEmpleado(body) {
 }
 
 
-export async function deleteEmpleado(id) {
+export async function deleteEmpleado(id, body) {
     try {
         const response = await fetch(`${apiURL}/api/empleados/${id}`, {
-            method: 'DELETE'
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(body)
         })
         const result = await response.json()
         return result
@@ -55,6 +59,6 @@ export async function editEmpleado(id, body) {
         const result = await response.json()
         return result
     } catch (error) {
-        console.log(`Algo salio mal al querer eliminar el usuario ${error}`)
+        console.log(`Algo salio mal al querer editar el usuario ${error}`)
     }
 }

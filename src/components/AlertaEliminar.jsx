@@ -6,10 +6,21 @@ import DialogTitle from '@mui/material/DialogTitle';
 import { deleteEmpleado } from '../services/fetchEmpleados';
 import { useState } from 'react';
 
-export function AlertaEliminar({ open, setOpen, empleadoID, recargarEmpleados }) {
+export function AlertaEliminar({ open, setOpen, empleadoID, empleado, recargarEmpleados }) {
 
     const [snackStatus, setSnackStatus] = useState(false)
     const [message, setMessage] = useState('')
+    const [empleadoMock, setEmpleadoMock] = useState({
+        nombres: empleado.nombres,
+        apellidos: empleado.apellidos,
+        fecha_nacimiento: empleado.fecha_nacimiento,
+        direccion: empleado.direccion,
+        telefono: empleado.telefono,
+        correo_electronico: empleado.correo_electronico,
+        activo: false,
+        departamento_id: empleado.departamento_id,
+        municipio_id: empleado.municipio_id
+    })
 
   const handleClose = () => {
     setOpen(false);
@@ -17,11 +28,11 @@ export function AlertaEliminar({ open, setOpen, empleadoID, recargarEmpleados })
 
   const handleCloseConfirm = async() => {
       try {
-          const result = await deleteEmpleado(empleadoID)
+          const result = await deleteEmpleado(empleadoID, empleadoMock)
           console.log(result)//result.message
           setOpen(false)
           setSnackStatus(true)
-          setMessage(result.message)
+          setMessage(result.mensaje)
           //aqui volver a llamar al setEmpleados para que actualize el estado de empleados
           recargarEmpleados()
     }catch(error) {

@@ -16,6 +16,7 @@ export function EditarEmpleado({ open, setOpen, empleado, recargarEmpleados }) {
         direccion: empleado.direccion,
         telefono: empleado.telefono,
         correo_electronico: empleado.correo_electronico,
+        activo: empleado.activo,
         departamento_id: empleado.departamento_id,
         municipio_id: empleado.municipio_id
     })

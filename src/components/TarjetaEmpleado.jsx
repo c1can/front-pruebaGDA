@@ -147,7 +147,7 @@ export const TarjetaEmpleado = ({empleado, fetchEmpleados }) =>{
         </IconButton>
       </Box>
 
-      <AlertaEliminar open={open} setOpen={setOpen} empleadoID={empleado.empleado_id} recargarEmpleados={fetchEmpleados}/>
+      <AlertaEliminar open={open} setOpen={setOpen} empleadoID={empleado.empleado_id} empleado={empleado} recargarEmpleados={fetchEmpleados}/>
       <EditarEmpleado open={openEdit} setOpen={setOpenEdit} empleado={empleado} recargarEmpleados={fetchEmpleados} />
     </Card>
   );
